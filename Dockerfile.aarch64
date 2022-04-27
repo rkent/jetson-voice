@@ -26,6 +26,7 @@ ENV SHELL /bin/bash
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 ARG MAKEFLAGS=-j$(nproc)
 ARG WORKSPACE=/jetson-voice
+ARG ARROW_VERSION=6.0.1
 
 WORKDIR ${WORKSPACE}
 
@@ -91,7 +92,7 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean 
 
-RUN git clone --branch apache-arrow-3.0.0 https://github.com/apache/arrow.git && \
+RUN git clone --branch apache-arrow-$ARROW_VERSION https://github.com/apache/arrow.git && \
 	cd arrow/cpp && \
 	mkdir build && \
 	cd build && \
