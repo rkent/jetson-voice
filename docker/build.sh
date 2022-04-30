@@ -3,6 +3,7 @@
 ROS_DISTRO=${1:-"none"}
 BASE_IMAGE=$2
 NEMO_VERSION="1.0.0rc1"
+TORCHTEXT_VERSION=v0.11.0
 
 # find container tag from os version
 source docker/tag.sh
@@ -17,6 +18,7 @@ if [ $ARCH = "aarch64" ]; then
 			BASE_IMAGE="nvcr.io/nvidia/l4t-ml:r32.6.1-py3"
 		elif [ $L4T_VERSION = "32.5.0" ] || [ $L4T_VERSION = "32.5.1" ] || [ $L4T_VERSION = "32.5.2" ]; then
 			BASE_IMAGE="nvcr.io/nvidia/l4t-ml:r32.5.0-py3"
+			TORCHTEXT_VERSION=v0.8.1
 		elif [ $L4T_VERSION = "32.4.4" ]; then
 			BASE_IMAGE="nvcr.io/nvidia/l4t-ml:r32.4.4-py3"
 		elif [ $L4T_VERSION = "32.4.3" ]; then
@@ -43,6 +45,7 @@ echo "BASE_IMAGE=$BASE_IMAGE"
 sudo docker build -t $VOICE_CONTAINER_BASE -f Dockerfile.$ARCH \
           --build-arg BASE_IMAGE=$BASE_IMAGE \
 		--build-arg NEMO_VERSION=$NEMO_VERSION \
+		--build-arg TORCHTEXT_VERSION=$TORCHTEXT_VERSION \
 		.
 		
 # build the runtime container
