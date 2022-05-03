@@ -40,7 +40,7 @@ VOICE_CONTAINER_BASE="$VOICE_CONTAINER-base"
 echo "CONTAINER=$VOICE_CONTAINER_BASE"
 echo "BASE_IMAGE=$BASE_IMAGE"
 
-sudo docker build -t $VOICE_CONTAINER_BASE -f Dockerfile.$ARCH \
+docker build -t $VOICE_CONTAINER_BASE -f Dockerfile.$ARCH \
           --build-arg BASE_IMAGE=$BASE_IMAGE \
 		--build-arg NEMO_VERSION=$NEMO_VERSION \
 		.
@@ -49,7 +49,7 @@ sudo docker build -t $VOICE_CONTAINER_BASE -f Dockerfile.$ARCH \
 echo "CONTAINER=$VOICE_CONTAINER"
 echo "BASE_IMAGE=$VOICE_CONTAINER_BASE"
 
-sudo docker build -t $VOICE_CONTAINER -f Dockerfile.runtime \
+docker build -t $VOICE_CONTAINER -f Dockerfile.runtime \
           --build-arg BASE_IMAGE=$VOICE_CONTAINER_BASE \
 		.
 
@@ -68,14 +68,14 @@ if [[ "$ROS_DISTRO" != "none" ]] && [[ $ARCH = "aarch64" ]]; then
 	CV_CSV="/etc/nvidia-container-runtime/host-files-for-container.d/opencv.csv"
 
 	if [ -f "$CV_CSV" ]; then
-		sudo mv $CV_CSV $CV_CSV.backup
+		mv $CV_CSV $CV_CSV.backup
 	fi
 	
 	# build ROS on top of jetson-voice 
 	echo "CONTAINER=$ROS_CONTAINER_BASE"
 	echo "BASE_IMAGE=$VOICE_CONTAINER_BASE"
 
-	sudo docker build -t $ROS_CONTAINER_BASE -f docker/containers/Dockerfile.ros.$ROS_DISTRO \
+	docker build -t $ROS_CONTAINER_BASE -f docker/containers/Dockerfile.ros.$ROS_DISTRO \
           --build-arg BASE_IMAGE=$VOICE_CONTAINER_BASE \
 		.
 	
@@ -83,12 +83,12 @@ if [[ "$ROS_DISTRO" != "none" ]] && [[ $ARCH = "aarch64" ]]; then
 	echo "CONTAINER=$ROS_CONTAINER"
 	echo "BASE_IMAGE=$ROS_CONTAINER_BASE"
 
-	sudo docker build -t $ROS_CONTAINER -f Dockerfile.ros \
+	docker build -t $ROS_CONTAINER -f Dockerfile.ros \
           --build-arg BASE_IMAGE=$ROS_CONTAINER_BASE \
 		.
 		
 	# restore opencv.csv mounts
 	if [ -f "$CV_CSV.backup" ]; then
-		sudo mv $CV_CSV.backup $CV_CSV
+		mv $CV_CSV.backup $CV_CSV
 	fi
 fi
