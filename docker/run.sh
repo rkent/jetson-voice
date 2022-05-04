@@ -151,7 +151,7 @@ if [ -z "$CONTAINER_IMAGE" ]; then
 	CONTAINER_REMOTE_IMAGE="dustynv/$CONTAINER_IMAGE"
 
 	# check for local image
-	if [[ "$(sudo docker images -q $CONTAINER_IMAGE 2> /dev/null)" == "" ]]; then
+	if [[ "$(docker images -q $CONTAINER_IMAGE 2> /dev/null)" == "" ]]; then
 		CONTAINER_IMAGE=$CONTAINER_REMOTE_IMAGE
 	fi
 fi
@@ -173,14 +173,14 @@ $USER_VOLUME"
 
 if [ $ARCH = "aarch64" ]; then
 
-	sudo docker run --runtime nvidia -it --rm \
+	docker run --runtime nvidia -it --rm \
 		--name=$CONTAINER_NAME \
 		--network host \
 		$MOUNTS $CONTAINER_IMAGE $USER_COMMAND
 	    
 elif [ $ARCH = "x86_64" ]; then
 
-	sudo docker run --gpus all -it --rm \
+	docker run --gpus all -it --rm \
 		--name=$CONTAINER_NAME \
 		--network=host \
 		--shm-size=8g \

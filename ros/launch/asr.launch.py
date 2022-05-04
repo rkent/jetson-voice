@@ -16,14 +16,14 @@ def generate_launch_description():
     asr_model = DeclareLaunchArgument('model', default_value='quartznet')
     input_device = DeclareLaunchArgument('input_device', default_value='/jetson-voice/data/audio/dusty.wav')
 
-    audio_input = Node(package='jetson_voice_ros', node_executable='audio_input.py',
+    audio_input = Node(package='jetson_voice_ros', executable='audio_input.py',
                        parameters=[
                             {"device": LaunchConfiguration('input_device')},
                        ],
                        arguments=['--ros-args', '--log-level', LaunchConfiguration('log_level')],
                        output='screen', emulate_tty=True)              
      
-    asr_node = Node(package='jetson_voice_ros', node_executable='asr.py',
+    asr_node = Node(package='jetson_voice_ros', executable='asr.py',
                         parameters=[
                             {"model": LaunchConfiguration('model')},
                         ],

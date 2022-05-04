@@ -15,7 +15,6 @@ def generate_launch_description():
     log_level = DeclareLaunchArgument('log_level', default_value='info')
     
     input_device = DeclareLaunchArgument('input_device', default_value='/jetson-voice/data/audio/dusty.wav')
-    output_device = DeclareLaunchArgument('output_device', default_value='/jetson-voice/data/audio/output.wav')
     
     audio_input = Node(package='jetson_voice_ros', executable='audio_input.py',
                        parameters=[
@@ -23,21 +22,9 @@ def generate_launch_description():
                        ],
                        arguments=['--ros-args', '--log-level', LaunchConfiguration('log_level')],
                        output='screen', emulate_tty=True)              
-     
-    audio_output = Node(package='jetson_voice_ros', executable='audio_output.py',
-                        parameters=[
-                            {"device": LaunchConfiguration('output_device')},
-                        ],
-                        remappings=[
-                            ("/voice/audio_out", "/voice/audio_in"),
-                        ],
-                        arguments=['--ros-args', '--log-level', LaunchConfiguration('log_level')],
-                        output='screen', emulate_tty=True)  
-                        
+                            
     return LaunchDescription([
         log_level,
         input_device,
-        output_device,
-        audio_input,
-        audio_output,
+        audio_input
     ])
